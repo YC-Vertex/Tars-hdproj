@@ -26,9 +26,9 @@ bool tAcOn(int temperature) {
         info[i] = act[11][i-2] ? 1500 : 500;
     }
 
-    for (int i = 0; i < REP_NUMS; ++i) {
+    for (int i = 0; i < AC_REP_COUNT; ++i) {
         irsend.sendRaw(info, 212, 38);
-        delay(REP_DELAY);
+        delay(AC_REP_DELAY);
     }
     return true;
 }
@@ -40,9 +40,9 @@ bool tAcOff() {
         info[i] = act[12][i-2] ? 1500 : 500;
     }
     
-    for (int i = 0; i < REP_NUMS; ++i) {
+    for (int i = 0; i < AC_REP_COUNT; ++i) {
         irsend.sendRaw(info, 212, 38);
-        delay(REP_DELAY);
+        delay(AC_REP_DELAY);
     }
     return true;
 }
@@ -58,9 +58,9 @@ bool tAcTemperature(int temperature) {
         info[i] = act[temperature-20][i-2] ? 1500 : 500;
     }
 
-    for (int i = 0; i < REP_NUMS; ++i) {
+    for (int i = 0; i < AC_REP_COUNT; ++i) {
         irsend.sendRaw(info, 212, 38);
-        delay(REP_DELAY);
+        delay(AC_REP_DELAY);
     }
     return true;
 }
