@@ -22,40 +22,46 @@ const bool act[13][212] = {
 bool tAcOn(int temperature) {
     int info[212];
     info[0] = 9000; info[1] = 4500; info[211] = 30000;
-    for(int i = 2; i < 211; i++){
-        info[i] = act[11][i-2];
+    for (int i = 2; i < 211; i++) {
+        info[i] = act[11][i-2] ? 1500 : 500;
     }
 
-    irsend.sendRaw(info, 212, 38);
-    delay(500);
+    for (int i = 0; i < REP_NUMS; ++i) {
+        irsend.sendRaw(info, 212, 38);
+        delay(REP_DELAY);
+    }
     return true;
 }
 
 bool tAcOff() {
     int info[212];
     info[0] = 9000; info[1] = 4500; info[211] = 30000;
-    for(int i = 2; i < 211; i++){
-        info[i] = act[12][i-2];
+    for (int i = 2; i < 211; i++) {
+        info[i] = act[12][i-2] ? 1500 : 500;
     }
-
-    irsend.sendRaw(info, 212, 38);
-    delay(500);
+    
+    for (int i = 0; i < REP_NUMS; ++i) {
+        irsend.sendRaw(info, 212, 38);
+        delay(REP_DELAY);
+    }
     return true;
 }
 
 bool tAcTemperature(int temperature) {
-    if(temperature > 30 || temperature < 20){
+    if (temperature > 30 || temperature < 20) {
         return false;
     }
 
     int info[212];
     info[0] = 9000; info[1] = 4500; info[211] = 30000;
-    for(int i = 2; i < 211; i++){
-        info[i] = act[temperature-20][i-2];
+    for (int i = 2; i < 211; i++) {
+        info[i] = act[temperature-20][i-2] ? 1500 : 500;
     }
 
-    irsend.sendRaw(info, 212, 38);
-    delay(500);
+    for (int i = 0; i < REP_NUMS; ++i) {
+        irsend.sendRaw(info, 212, 38);
+        delay(REP_DELAY);
+    }
     return true;
 }
 

@@ -19,16 +19,16 @@ void loop() {
     // Serial1Input();
     Serial.println("on");
     tAcOn();
-    delay(5000);
+    delay(2000);
     Serial.println("24");
     tAcTemperature(24);
-    delay(5000);
+    delay(2000);
     Serial.println("27");
     tAcTemperature(27);
-    delay(5000);
+    delay(2000);
     Serial.println("off");
     tAcOff();
-    delay(5000);
+    delay(2000);
 }
 
 /*
