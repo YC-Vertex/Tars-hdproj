@@ -4,6 +4,8 @@
 #include <IRremote.h>
 
 #define DEFAULT_TEMP (26)
+extern const bool act[13][209];
+IRsend irsend;
 
 enum AcMode { TAC_COOL, TAC_HEAT, TAC_FAN, TAC_DEHUMID };
 enum AcSpeed { TAC_AUTO, TAC_LOW, TAC_MED, TAC_HIGH };
