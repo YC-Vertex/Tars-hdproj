@@ -143,18 +143,56 @@ void Cmd1Decode() {
             }
             // tars
             if (strcmp(dvc, "TS") == 0) {
-
+                if (strcmp(cmd, "SLP") == 0 && nsct == 0) {
+                    tTsSleep();
+                }
+                else if (strcmp(cmd, "SDB") == 0 && nsct == 0) {
+                    tTsStandby();
+                }
+                else if (strcmp(cmd, "INT") == 0) {
+                    int val[4];
+                    bool sucFlag = true;
+                    for (int i = 0; i < 4; ++i) {
+                        sucFlag *= ExtractVal(nucRxBuf, smcpos[i], smcpos[i+1], val[i]);
+                    }
+                    if (!sucFlag) {
+                        if (DEBUG_MODE) {
+                            Serial.print("> decive = ");
+                            Serial.print(dvc);
+                            Serial.print(", command = ");
+                            Serial.print(cmd);
+                            Serial.println(": Error");
+                        }
+                    } else {
+                        tTsSetInitial(val);
+                    }
+                }
+                else if (strcmp(cmd, "DBG") && nsct == 0) {
+                    int val[4];
+                    bool sucFlag = ExtractSct(nucRxBuf, smcpos[0], smcpos[1], 4, val);
+                    if (!sucFlag) {
+                        if (DEBUG_MODE) {
+                            Serial.print("> decive = ");
+                            Serial.print(dvc);
+                            Serial.print(", command = ");
+                            Serial.print(cmd);
+                            Serial.println(": Error");
+                        }
+                    } else {
+                        tTsDebug(val[0], val[1], val[2], val[3]);
+                    }
+                }
             }
 
             // air conditioner
             else if (strcmp(dvc, "AC") == 0) {
                 if (strcmp(cmd, "ONN") == 0) {
-                    if (nsct == 0)
+                    if (nsct == 0) 
                         tAcOn();
                     else if (nsct == 1) {
                         int val = 0;
-                        if (!ExtractVal(nucRxBuf, smcpos[0], smcpos[1], val)) {
-                            isReady = false;
+                        bool sucFlag = ExtractVal(nucRxBuf, smcpos[0], smcpos[1], val);
+                        if (!sucFlag) {
                             if (DEBUG_MODE) {
                                 Serial.print("> decive = ");
                                 Serial.print(dvc);
@@ -162,8 +200,9 @@ void Cmd1Decode() {
                                 Serial.print(cmd);
                                 Serial.println(": Error");
                             }
+                        } else {
+                            tAcOn(val);
                         }
-                        tAcOn(val);
                     }
                 }
                 else if (strcmp(cmd, "OFF") == 0 && nsct == 0) {

@@ -22,28 +22,28 @@
 
 ### TS - Tars
 
-- `SLP`：休眠模式，nmsg = 0。
-- `SDB`：工作模式，nmsg = 0。
-- `INT`：修改机器人舵机默认位置，nmsg = 4，分别为lup rup lturn rturn。示例：`$TSINT4:100;75;55;70;<`
-- `FWD`：修改前进动作，nmsg >= 1，每个sct中包含4个val，分别为langle rangle upturnflag(0:up,1:turn) delay(ms)。示例：`$TSFWD1:15,160,0,200;<`
-- `BWD`：修改后退动作，nmsg >= 1，同上。
-- `MVF`：前进，nmsg = 0。
-- `MVB`：后退，nmsg = 0。
-- `STP`：停止当前动作。
-- `DBG`：调试指令，nmsg = 1，每个sct中包含4个val，同`FWD`指令。示例：`$TSDBG1:15,160,0,200;<`
+- [x] `SLP`：休眠模式，nmsg = 0。
+- [x] `SDB`：工作模式，nmsg = 0。
+- [x] `INT`：修改机器人舵机默认位置，nmsg = 4，分别为lup rup lturn rturn。示例：`$TSINT4:100;75;55;70;<`
+- [ ] `FWD`：修改前进动作，nmsg >= 1，每个sct中包含4个val，分别为langle rangle upturnflag(0:up,1:turn) delay(ms)。示例：`$TSFWD1:15,160,0,200;<`
+- [ ] `BWD`：修改后退动作，nmsg >= 1，同上。
+- [ ] `MVF`：前进，nmsg = 0。
+- [ ] `MVB`：后退，nmsg = 0。
+- [ ] `STP`：停止当前动作。
+- [x] `DBG`：调试指令，nmsg = 1，每个sct中包含4个val，同`FWD`指令。示例：`$TSDBG1:15,160,0,200;<`
 
 ### AC - Air Conditioner
 
-- `ONN`：打开空调，nmsg = 0时以默认温度和模式打开，nmsg = 1时需要在msg中给出开启温度。示例：`$ACONN1:27;<`
-- `OFF`：关闭空调，nmsg = 0。示例：`$ACOFF0:<`
-- `TPR`：调节温度，nmsg = 1，在msg中给出温度。示例：`$ACTPR1:27;<`
-- `MOD`：调节模式，nmsg = 1，未实现
-- `SPD`：调节风速，nmsg = 1，未实现
+- [x] `ONN`：打开空调，nmsg = 0时以默认温度和模式打开，nmsg = 1时需要在msg中给出开启温度。示例：`$ACONN1:27;<`
+- [x] `OFF`：关闭空调，nmsg = 0。示例：`$ACOFF0:<`
+- [x] `TPR`：调节温度，nmsg = 1，在msg中给出温度。示例：`$ACTPR1:27;<`
+- [ ] `MOD`：调节模式，nmsg = 1，未实现
+- [ ] `SPD`：调节风速，nmsg = 1，未实现
 
 ### LT - Light
-- `ONN`：打开灯光，nmsg = 0。
-- `OFF`：关闭灯光，nmsg = 0。
+- [x] `ONN`：打开灯光，nmsg = 0。
+- [x] `OFF`：关闭灯光，nmsg = 0。
 
 ### PW - Power
-- `ONN`：打开电源，nmsg = 0。
-- `OFF`：关闭电源，nmsg = 0。
+- [x] `ONN`：打开电源，nmsg = 0。
+- [x] `OFF`：关闭电源，nmsg = 0。

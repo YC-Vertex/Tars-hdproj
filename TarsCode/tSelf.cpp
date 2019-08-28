@@ -29,8 +29,10 @@ bool tTsStandby() {
     return false;
 }
 
-bool tTsSetInitial() {
-    return false;
+bool tTsSetInitial(int * angle) {
+    for (int i = 0; i < 4; ++i) {
+        tsInitial[i] = angle[i];
+    }
 }
 
 bool tTsDebug(int lval, int rval, int mode, int itv) {

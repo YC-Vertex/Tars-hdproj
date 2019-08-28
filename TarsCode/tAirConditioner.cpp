@@ -30,6 +30,11 @@ bool tAcOn(int temperature) {
         irsend.sendRaw(info, 212, 38);
         delay(AC_REP_DELAY);
     }
+
+    if (temperature != AC_DEFAULT_TEMP) {
+        tAcTemperature(temperature);
+    }
+    
     return true;
 }
 

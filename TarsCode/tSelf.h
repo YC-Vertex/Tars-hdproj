@@ -17,7 +17,7 @@ extern int tsInterval[9];
 void tTsInit();
 bool tTsSleep();
 bool tTsStandby();
-bool tTsSetInitial();
+bool tTsSetInitial(int * angle);
 bool tTsDebug(int lval, int rval, int mode, int itv = 0);
 
 #endif
