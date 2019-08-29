@@ -28,11 +28,17 @@ void tTsInit(bool isInitFromEeprom) {
         int eeAddr = 0;
         EEPROM.get(eeAddr, tsInitial);
         eeAddr += sizeof(tsInitial);
-        EEPROM.get(eeAddr, tsAngle);
-        eeAddr += sizeof(tsAngle);
-        EEPROM.get(eeAddr, tsMode);
-        eeAddr += sizeof(tsMode);
-        EEPROM.get(eeAddr, tsInterval);
+        EEPROM.get(eeAddr, tsfAngle);
+        eeAddr += sizeof(tsfAngle);
+        EEPROM.get(eeAddr, tsfMode);
+        eeAddr += sizeof(tsfMode);
+        EEPROM.get(eeAddr, tsfInterval);
+        eeAddr += sizeof(tsfInterval);
+        EEPROM.get(eeAddr, tsbAngle);
+        eeAddr += sizeof(tsbAngle);
+        EEPROM.get(eeAddr, tsbMode);
+        eeAddr += sizeof(tsbMode);
+        EEPROM.get(eeAddr, tsbInterval);
         delay(100);
     }
 }
@@ -41,11 +47,17 @@ bool tTsSave() {
     int eeAddr = 0;
     EEPROM.put(eeAddr, tsInitial);
     eeAddr += sizeof(tsInitial);
-    EEPROM.put(eeAddr, tsAngle);
-    eeAddr += sizeof(tsAngle);
-    EEPROM.put(eeAddr, tsMode);
-    eeAddr += sizeof(tsMode);
-    EEPROM.put(eeAddr, tsInterval);
+    EEPROM.put(eeAddr, tsfAngle);
+    eeAddr += sizeof(tsfAngle);
+    EEPROM.put(eeAddr, tsfMode);
+    eeAddr += sizeof(tsfMode);
+    EEPROM.put(eeAddr, tsfInterval);
+    eeAddr += sizeof(tsfInterval);
+    EEPROM.put(eeAddr, tsbAngle);
+    eeAddr += sizeof(tsbAngle);
+    EEPROM.put(eeAddr, tsbMode);
+    eeAddr += sizeof(tsbMode);
+    EEPROM.put(eeAddr, tsbInterval);
     delay(100);
     return true;
 }
@@ -89,18 +101,18 @@ void angleScale(int &val) {
         val = 90;
 }
 
-void tTsSetFowardSingle(int index, int* val){
+void tTsSetForwardSingle(int index, int* val){
     tsfAngle[index][0] = val[0];
     tsfAngle[index][1] = val[1];
     tsfMode[index] = val[2];
-    tsfInterval[index] = val;
+    tsfInterval[index] = val[3];
 }
 
 void tTsSetBackwardSingle(int index, int* val){
     tsbAngle[index][0] = val[0];
     tsbAngle[index][1] = val[1];
     tsbMode[index] = val[2];
-    tsbInterval[index] = val;
+    tsbInterval[index] = val[3];
 }
 
 void tTsMoveForward(){
@@ -109,8 +121,8 @@ void tTsMoveForward(){
             tarsLTurn.write(tsfAngle[i][0]);
             tarsRTurn.write(tsfAngle[i][1]);
         }else{
-            tarLUp.write(tsfAngle[i][0]);
-            tarRUp.write(tsfAngle[i][1]);
+            tarsLUp.write(tsfAngle[i][0]);
+            tarsRUp.write(tsfAngle[i][1]);
         }
     }
 }
@@ -121,8 +133,8 @@ void tTsMoveBackward(){
             tarsLTurn.write(tsbAngle[i][0]);
             tarsRTurn.write(tsbAngle[i][1]);
         }else{
-            tarLUp.write(tsbAngle[i][0]);
-            tarRUp.write(tsbAngle[i][1]);
+            tarsLUp.write(tsbAngle[i][0]);
+            tarsRUp.write(tsbAngle[i][1]);
         }
     }
 }

@@ -22,6 +22,8 @@ void RxCleanUp(char * buf, int index, int &size);
 bool ExtractVal(char * buf, int findex, int rindex, int &target);
 bool ExtractSct(char * buf, int findex, int rindex, int nums, int * target);
 
+void DebugOutput(char * dvc, char * cmd, char * sts);
+
 void setup() {
     Serial.begin(115200);
     Serial1.begin(115200);
@@ -140,15 +142,7 @@ void Cmd1Decode() {
         }
 
         if (isReady) {
-            if (DEBUG_MODE) {
-                Serial.print("> decive = ");
-                Serial.print(dvc);
-                Serial.print(", command = ");
-                Serial.print(cmd);
-                Serial.print(", nsection = ");
-                Serial.print(nsct);
-                Serial.println(": Ready");
-            }
+            DebugOutput(dvc, cmd, "Ready");
             // tars
             if (strcmp(dvc, "TS") == 0) {
                 if (strcmp(cmd, "SLP") == 0 && nsct == 0) {
@@ -164,28 +158,65 @@ void Cmd1Decode() {
                         sucFlag *= ExtractVal(nucRxBuf, smcpos[i], smcpos[i+1], val[i]);
                     }
                     if (!sucFlag) {
-                        if (DEBUG_MODE) {
-                            Serial.print("> decive = ");
-                            Serial.print(dvc);
-                            Serial.print(", command = ");
-                            Serial.print(cmd);
-                            Serial.println(": Error");
-                        }
+                        DebugOutput(dvc, cmd, "Error");
                     } else {
                         tTsSetInitial(val);
                     }
+                }
+                else if (strcmp(cmd, "FWD") == 0) {
+                    for (int i = 0; i < nsct; ++i) {
+                        int val[4];
+                        bool sucFlag = ExtractSct(nucRxBuf, smcpos[0], smcpos[1], 4, val);
+                        if (!sucFlag) {
+                            DebugOutput(dvc, cmd, "Error");
+                        } else {
+                            tTsSetForwardSingle(i, val);
+                        }
+                    }
+                }
+                else if (strcmp(cmd, "BWD") == 0) {
+                    for (int i = 0; i < nsct; ++i) {
+                        int val[4];
+                        bool sucFlag = ExtractSct(nucRxBuf, smcpos[0], smcpos[1], 4, val);
+                        if (!sucFlag) {
+                            DebugOutput(dvc, cmd, "Error");
+                        } else {
+                            tTsSetBackwardSingle(i, val);
+                        }
+                    }
+                }
+                else if (strcmp(cmd, "FWS") == 0 && nsct == 1) {
+                    int val[5];
+                    bool sucFlag = ExtractSct(nucRxBuf, smcpos[0], smcpos[1], 5, val);
+                    if (!sucFlag) {
+                        DebugOutput(dvc, cmd, "Error");
+                    } else {
+                        tTsSetForwardSingle(val[0], &val[1]);
+                    }
+                }
+                else if (strcmp(cmd, "BWS") == 0 && nsct == 1) {
+                    int val[5];
+                    bool sucFlag = ExtractSct(nucRxBuf, smcpos[0], smcpos[1], 5, val);
+                    if (!sucFlag) {
+                        DebugOutput(dvc, cmd, "Error");
+                    } else {
+                        tTsSetForwardSingle(val[0], &val[1]);
+                    }
+                }
+                else if (strcmp(cmd, "MVF") == 0 && nsct == 0) {
+                    tTsMoveForward();
+                }
+                else if (strcmp(cmd, "MVB") == 0 && nsct == 0) {
+                    tTsMoveBackward();
+                }
+                else if (strcmp(cmd, "STP") == 0 && nsct == 0) {
+                    tTsStop();
                 }
                 else if (strcmp(cmd, "DBG") == 0 && nsct == 1) {
                     int val[4];
                     bool sucFlag = ExtractSct(nucRxBuf, smcpos[0], smcpos[1], 4, val);
                     if (!sucFlag) {
-                        if (DEBUG_MODE) {
-                            Serial.print("> decive = ");
-                            Serial.print(dvc);
-                            Serial.print(", command = ");
-                            Serial.print(cmd);
-                            Serial.println(": Error");
-                        }
+                        DebugOutput(dvc, cmd, "Error");
                     } else {
                         tTsDebug(val[0], val[1], val[2], val[3]);
                     }
@@ -204,13 +235,7 @@ void Cmd1Decode() {
                         int val = 0;
                         bool sucFlag = ExtractVal(nucRxBuf, smcpos[0], smcpos[1], val);
                         if (!sucFlag) {
-                            if (DEBUG_MODE) {
-                                Serial.print("> decive = ");
-                                Serial.print(dvc);
-                                Serial.print(", command = ");
-                                Serial.print(cmd);
-                                Serial.println(": Error");
-                            }
+                            DebugOutput(dvc, cmd, "Error");
                         } else {
                             tAcOn(val);
                         }
@@ -241,6 +266,7 @@ void Cmd1Decode() {
                     tLtOff();
                 }
             }
+
             isReady = false;
             RxCleanUp(nucRxBuf, smcpos[nsct] + 2, nucRxPtr);
         }
@@ -293,4 +319,15 @@ bool ExtractSct(char * buf, int findex, int rindex, int nums, int * target) {
         target[i] = val[i];
     }
     return true;
+}
+
+void DebugOutput(char * dvc, char * cmd, char * sts) {
+    if (DEBUG_MODE) {
+        Serial.print("> decive = ");
+        Serial.print(dvc);
+        Serial.print(", command = ");
+        Serial.print(cmd);
+        Serial.print(": ");
+        Serial.println(sts);
+    }
 }

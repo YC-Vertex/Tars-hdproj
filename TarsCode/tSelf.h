@@ -11,15 +11,23 @@
 extern Servo tarsLUp, tarsRUp, tarsLTurn, tarsRTurn;
 
 extern unsigned char tsInitial[4];
-extern unsigned char tsAngle[9][2];
-extern unsigned char tsMode[9];
-extern int tsInterval[9];
+extern unsigned char tsfAngle[9][2];
+extern unsigned char tsfMode[9];
+extern int tsfInterval[9];
+extern unsigned char tsbAngle[9][2];
+extern unsigned char tsbMode[9];
+extern int tsbInterval[9];
 
 void tTsInit(bool isInitFromEeprom = false);
 bool tTsSave();
 bool tTsSleep();
 bool tTsStandby();
 bool tTsSetInitial(int * angle);
+void tTsSetForwardSingle(int index, int* val);
+void tTsSetBackwardSingle(int index, int* val);
+void tTsMoveForward();
+void tTsMoveBackward();
+void tTsStop();
 bool tTsDebug(int lval, int rval, int mode, int itv = 0);
 
 void angleScale(int &val);
