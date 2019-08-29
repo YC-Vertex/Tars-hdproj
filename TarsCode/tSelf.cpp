@@ -117,24 +117,28 @@ void tTsSetBackwardSingle(int index, int* val){
 
 void tTsMoveForward(){
     for(int i = 0; i < 9; i++){
-        if(tsfMode[i]){
+        if(tsfMode[i] == 1){
             tarsLTurn.write(tsfAngle[i][0]);
             tarsRTurn.write(tsfAngle[i][1]);
-        }else{
+            delay(tsfInterval[i]);
+        }else if (tsfMode[i] == 0){
             tarsLUp.write(tsfAngle[i][0]);
             tarsRUp.write(tsfAngle[i][1]);
+            delay(tsfInterval[i]);
         }
     }
 }
 
 void tTsMoveBackward(){
     for(int i = 0; i < 9; i++){
-        if(tsbMode[i]){
+        if(tsbMode[i] == 1){
             tarsLTurn.write(tsbAngle[i][0]);
             tarsRTurn.write(tsbAngle[i][1]);
-        }else{
+            delay(tsbInterval[i]);
+        }else if (tsbMode[i] == 0){
             tarsLUp.write(tsbAngle[i][0]);
             tarsRUp.write(tsbAngle[i][1]);
+            delay(tsbInterval[i]);
         }
     }
 }

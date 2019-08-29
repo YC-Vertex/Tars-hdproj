@@ -48,7 +48,7 @@ int sendTsForward(String command) {
     }
     Serial1.write("$TSFWD");
     Serial1.write('0' + nsct);
-    Serial1.write(':')
+    Serial1.write(':');
     Serial1.write(command);
     Serial1.write('<');
 }
@@ -61,7 +61,7 @@ int sendTsBackward(String command) {
     }
     Serial1.write("$TSBWD");
     Serial1.write('0' + nsct);
-    Serial1.write(':')
+    Serial1.write(':');
     Serial1.write(command);
     Serial1.write('<');
 }
