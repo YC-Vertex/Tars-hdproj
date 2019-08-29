@@ -27,7 +27,7 @@ void DebugOutput(char * dvc, char * cmd, char * sts);
 void setup() {
     Serial.begin(115200);
     Serial1.begin(115200);
-    tTsInit();
+    tTsInit(true);
 }
 
 void loop() {
