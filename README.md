@@ -50,6 +50,8 @@
 #### LT - Light
 - [x] `ONN`：打开灯光，nmsg = 0。
 - [x] `OFF`：关闭灯光，nmsg = 0。
+- [ ] `TPL`：预定义模板，nmsg = 1，在msg中给出模板编号。
+- [ ] `CLR`：修改颜色，nmsg = 1，每个sct中包含3个val，分别为r g b。
 
 #### PW - Power
 - [x] `ONN`：打开电源，nmsg = 0。

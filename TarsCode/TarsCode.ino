@@ -32,6 +32,28 @@ void setup() {
 
 void loop() {
     Serial1Input();
+
+    // color
+    if (curTemp == 0) {
+        static uint8_t startIndex = 0;
+        startIndex = startIndex + 1;
+        ChangePalettePeriodically();
+        FillLEDsFromPaletteColors(startIndex);
+        FastLED.show();
+        FastLED.delay(1000 / UPDATES_PER_SECOND);
+    } else if (curTemp == -1) {
+        for (int i = 0; i < LED_CNT; ++i) {
+            tsLeds[i].r = curColor[0];
+            tsLeds[i].g = curColor[1];
+            tsLeds[i].b = curColor[2];
+        }
+    } else {
+        for (int i = 0; i < LED_CNT; ++i) {
+            tsLeds[i].r = tsTemplate[curTemp][0];
+            tsLeds[i].g = tsTemplate[curTemp][1];
+            tsLeds[i].b = tsTemplate[curTemp][2];
+        }
+    }
 }
 
 void Serial1Input() {
@@ -255,6 +277,24 @@ void Cmd1Decode() {
                 }
                 else if (strcmp(cmd, "OFF") == 0 && nsct == 0) {
                     tLtOff();
+                }
+                else if (strcmp(cmd, "TPL") == 0 && nsct == 1) {
+                    int val = 0;
+                    bool sucFlag = ExtractVal(nucRxBuf, smcpos[0], smcpos[1], val);
+                    if (!sucFlag) {
+                        DebugOutput(dvc, cmd, "Error");
+                    } else {
+                        tLtSetTemplate(val);
+                    }
+                }
+                else if (strcmp(cmd, "CLR") == 0 && nsct == 1) {
+                    int val[3] = {0};
+                    bool sucFlag = ExtractSct(nucRxBuf, smcpos[0], smcpos[1], 3, val);
+                    if (!sucFlag) {
+                        DebugOutput(dvc, cmd, "Error");
+                    } else {
+                        tLtSetColor(val);
+                    }
                 }
             }
 
