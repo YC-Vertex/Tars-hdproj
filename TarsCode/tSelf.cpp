@@ -6,6 +6,9 @@ unsigned char tsInitial[4] = {100, 75, 55, 70};
 unsigned char tsAngle[9][2] = {{15, 160}, {15, 110}, {140, 40}, {40, 85}, {120, 60}, {60, 55}, {100, 75}};
 unsigned char tsMode[9] = {0, 1, 0, 1, 0, 1, 0, 3, 3}; // 0: up, 1: turn
 int tsInterval[9] = {200, 1200, 800, 800, 200, 800, 2000, -1, -1};
+unsigned char tsfAngle[9][2] = {{15, 160}, {15, 110}, {140, 40}, {40, 85}, {120, 60}, {60, 55}, {100, 75}};
+unsigned char tsfMode[9] = {0, 1, 0, 1, 0, 1, 0, 3, 3}; // 0: up, 1: turn
+int tsfInterval[9] = {200, 1200, 800, 800, 200, 800, 2000, -1, -1};
 
 void tTsInit(bool isInitFromEeprom) {
     tarsLUp.attach(9);
@@ -84,4 +87,18 @@ void angleScale(int &val) {
         val = 176;
     if (val <= -20 || val >= 200)
         val = 90;
+}
+
+void tTsSetFowardSingle(int index, int* val){
+    tsAngle[index][0] = val[0];
+    tsAngle[index][1] = val[1];
+    tsMode[index] = val[2];
+    tsInterval[index] = val;
+}
+
+void tTsSetBackwardSingle(int index, int* val){
+    tsfAngle[index][0] = val[0];
+    tsfAngle[index][1] = val[1];
+    tsfMode[index] = val[2];
+    tsfInterval[index] = val;
 }
