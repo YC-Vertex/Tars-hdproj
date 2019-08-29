@@ -8,6 +8,17 @@ int curColor[3] = {0, 0, 0};
 
 CRGB tsLeds[LED_CNT];
 
+CRGBPalette16 currentPalette;
+TBlendType    currentBlending;
+
+void tLtInit() {
+    FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(tsLeds, LED_CNT).setCorrection(TypicalLEDStrip);
+    FastLED.setBrightness(BRIGHTNESS);
+    
+    currentPalette = RainbowColors_p;
+    currentBlending = LINEARBLEND;
+}
+
 bool tLtOn() {
     return false;
 }
@@ -28,17 +39,6 @@ void tLtSetColor(int * color) {
 }
 
 
-
-CRGBPalette16 currentPalette;
-TBlendType    currentBlending;
-
-void tLtInit() {
-    FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(tsLeds, LED_CNT).setCorrection(TypicalLEDStrip);
-    FastLED.setBrightness(BRIGHTNESS);
-    
-    currentPalette = RainbowColors_p;
-    currentBlending = LINEARBLEND;
-}
 
 void FillLEDsFromPaletteColors(uint8_t colorIndex)
 {

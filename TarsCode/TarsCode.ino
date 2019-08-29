@@ -28,6 +28,7 @@ void setup() {
     Serial.begin(115200);
     Serial1.begin(115200);
     tTsInit(true);
+    tLtInit();
 }
 
 void loop() {
@@ -39,8 +40,6 @@ void loop() {
         startIndex = startIndex + 1;
         ChangePalettePeriodically();
         FillLEDsFromPaletteColors(startIndex);
-        FastLED.show();
-        FastLED.delay(1000 / UPDATES_PER_SECOND);
     } else if (curTemp == -1) {
         for (int i = 0; i < LED_CNT; ++i) {
             tsLeds[i].r = curColor[0];
@@ -49,11 +48,14 @@ void loop() {
         }
     } else {
         for (int i = 0; i < LED_CNT; ++i) {
-            tsLeds[i].r = tsTemplate[curTemp][0];
-            tsLeds[i].g = tsTemplate[curTemp][1];
-            tsLeds[i].b = tsTemplate[curTemp][2];
+            tsLeds[i].r = tsTemplate[curTemp-1][0];
+            tsLeds[i].g = tsTemplate[curTemp-1][1];
+            tsLeds[i].b = tsTemplate[curTemp-1][2];
         }
     }
+    
+    FastLED.show();
+    FastLED.delay(1000 / UPDATES_PER_SECOND);
 }
 
 void Serial1Input() {
@@ -129,6 +131,7 @@ void Cmd1Decode() {
             }
 
             if (isStart) {
+                Serial.println(nucRxBuf);
                 if (i == 1) {
                     dvc[0] = nucRxBuf[i];
                     dvc[1] = nucRxBuf[i+1];
@@ -340,7 +343,7 @@ bool ExtractVal(char * buf, int findex, int rindex, int &target) {
 
 bool ExtractSct(char * buf, int findex, int rindex, int nums, int * target) {
     int val[nums] = {0};
-    int compos[nums+1] = {-1};
+    int compos[nums+2] = {-1};
     int ncom = 0;
 
     compos[0] = findex;
@@ -348,6 +351,7 @@ bool ExtractSct(char * buf, int findex, int rindex, int nums, int * target) {
         if (buf[i] == ',')
             compos[++ncom] = i;
     }
+    compos[ncom+1] = rindex;
     if (ncom + 1 != nums)
         return false;
 

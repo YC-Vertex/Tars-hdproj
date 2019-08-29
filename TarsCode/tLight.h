@@ -18,6 +18,7 @@ extern int curColor[3];
 
 extern CRGB tsLeds[LED_CNT];
 
+void tLtInit();
 bool tLtOn();
 bool tLtOff();
 void tLtSetTemplate(int index);
