@@ -1,13 +1,13 @@
 void setup() {
     Serial1.begin(115200);
     Particle.function("send", sendString);
-    Particle.function("tssts", sendTsStatus);
+    Particle.function("tssts", sendTsStatus);       // slp, sdb, mvf, mvb, stp, sav
     Particle.function("tsint", sendTsInitial);
     Particle.function("tsdbg", sendTsDebug);
-    Particle.function("acsts", sendAcStatus);
+    Particle.function("acsts", sendAcStatus);       // onn, off
     Particle.function("actpr", sendAcTemperature);
-    Particle.function("ltsts", sendLtStatus);
-    Particle.function("pwsts", sendPwStatus);
+    Particle.function("ltsts", sendLtStatus);       // onn, off
+    Particle.function("pwsts", sendPwStatus);       // onn, off
 }
 
 void loop() {

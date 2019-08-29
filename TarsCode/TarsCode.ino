@@ -135,7 +135,7 @@ void Cmd1Decode() {
                 }
             }
 
-            if (i == nucRxPtr - 1)
+            if (i >= nucRxPtr - 1)
                 return;
         }
 
@@ -190,6 +190,9 @@ void Cmd1Decode() {
                         tTsDebug(val[0], val[1], val[2], val[3]);
                     }
                 }
+                else if (strcmp(cmd, "SAV") == 0 && nsct == 0) {
+                    tTsSave();
+                }
             }
 
             // air conditioner
@@ -241,6 +244,10 @@ void Cmd1Decode() {
 
             isReady = false;
             RxCleanUp(nucRxBuf, smcpos[nsct] + 2, nucRxPtr);
+        }
+
+        if (nucRxPtr <= 0) {
+            return;
         }
     }
 }

@@ -7,7 +7,7 @@ unsigned char tsAngle[9][2] = {{15, 160}, {15, 110}, {140, 40}, {40, 85}, {120, 
 unsigned char tsMode[9] = {0, 1, 0, 1, 0, 1, 0, 3, 3}; // 0: up, 1: turn
 int tsInterval[9] = {200, 1200, 800, 800, 200, 800, 2000, -1, -1};
 
-void tTsInit() {
+void tTsInit(bool isInitFromEeprom) {
     tarsLUp.attach(9);
     tarsRUp.attach(10);
     tarsLTurn.attach(11);
@@ -20,7 +20,33 @@ void tTsInit() {
         tarsRTurn.write(tsInitial[3]); // + : front
         delay(TS_REP_DELAY);
     }
+
+    if (isInitFromEeprom) {
+        int eeAddr = 0;
+        EEPROM.get(eeAddr, tsInitial);
+        eeAddr += sizeof(tsInitial);
+        EEPROM.get(eeAddr, tsAngle);
+        eeAddr += sizeof(tsAngle);
+        EEPROM.get(eeAddr, tsMode);
+        eeAddr += sizeof(tsMode);
+        EEPROM.get(eeAddr, tsInterval);
+        delay(100);
+    }
 }
+
+bool tTsSave() {
+    int eeAddr = 0;
+    EEPROM.put(eeAddr, tsInitial);
+    eeAddr += sizeof(tsInitial);
+    EEPROM.put(eeAddr, tsAngle);
+    eeAddr += sizeof(tsAngle);
+    EEPROM.put(eeAddr, tsMode);
+    eeAddr += sizeof(tsMode);
+    EEPROM.put(eeAddr, tsInterval);
+    delay(100);
+    return true;
+}
+
 bool tTsSleep() {
     return false;
 }
@@ -49,4 +75,13 @@ bool tTsDebug(int lval, int rval, int mode, int itv) {
         return false;
     }
     return true;
+}
+
+void angleScale(int &val) {
+    if (val <= 4)
+        val = 4;
+    if (val >= 176)
+        val = 176;
+    if (val <= -20 || val >= 200)
+        val = 90;
 }
