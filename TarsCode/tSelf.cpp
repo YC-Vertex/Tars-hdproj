@@ -2,19 +2,19 @@
 
 Servo tarsLUp, tarsRUp, tarsLTurn, tarsRTurn;
 
-unsigned char tsInitial[4] = {100, 75, 55, 70};
-unsigned char tsfAngle[9][2] = {{15, 160}, {15, 110}, {140, 40}, {40, 85}, {120, 60}, {60, 55}, {100, 75}};
+unsigned char tsInitial[4] = {60, 80, 60, 75};
+unsigned char tsfAngle[9][2] = {{0, 140}, {20, 115}, {50, 90}, {40, 95}, {70, 70}, {60, 75}, {60, 80}};
 unsigned char tsfMode[9] = {0, 1, 0, 1, 0, 1, 0, 3, 3}; // 0: up, 1: turn
-int tsfInterval[9] = {200, 1200, 800, 800, 200, 800, 2000, -1, -1};
+int tsfInterval[9] = {200, 1200, 800, 800, 800, 800, 2000, -1, -1};
 unsigned char tsbAngle[9][2] = {{15, 160}, {15, 110}, {140, 40}, {40, 85}, {120, 60}, {60, 55}, {100, 75}};
 unsigned char tsbMode[9] = {0, 1, 0, 1, 0, 1, 0, 3, 3}; // 0: up, 1: turn
 int tsbInterval[9] = {200, 1200, 800, 800, 200, 800, 2000, -1, -1};
 
 void tTsInit(bool isInitFromEeprom) {
-    tarsLUp.attach(9);
-    tarsRUp.attach(10);
-    tarsLTurn.attach(11);
-    tarsRTurn.attach(12);
+    tarsLUp.attach(8);
+    tarsRUp.attach(9);
+    tarsLTurn.attach(10);
+    tarsRTurn.attach(11);
 
     for (int i = 0; i < TS_REP_COUNT; ++i) {
         tarsLUp.write(tsInitial[0]);   // + : down
