@@ -120,7 +120,14 @@ void Cmd1Decode() {
                         isStart = false;
                     } else {
                         nsct = nucRxBuf[i] - '0';
-                        smcpos[0] = 6;
+                    }
+                } else if (i == 7) {
+                    if (nucRxBuf[i] != ':') {
+                        RxCleanUp(nucRxBuf, i + 1, nucRxPtr);
+                        i = -1;
+                        isStart = false;
+                    } else {
+                        smcpos[0] = i;
                     }
                 }
                 else if (nucRxBuf[i] == ';') {
@@ -128,7 +135,8 @@ void Cmd1Decode() {
                 }
             }
 
-            return;
+            if (i == nucRxPtr - 1)
+                return;
         }
 
         if (isReady) {
@@ -149,7 +157,7 @@ void Cmd1Decode() {
                 else if (strcmp(cmd, "SDB") == 0 && nsct == 0) {
                     tTsStandby();
                 }
-                else if (strcmp(cmd, "INT") == 0) {
+                else if (strcmp(cmd, "INT") == 0 && nsct == 4) {
                     int val[4];
                     bool sucFlag = true;
                     for (int i = 0; i < 4; ++i) {
@@ -167,7 +175,7 @@ void Cmd1Decode() {
                         tTsSetInitial(val);
                     }
                 }
-                else if (strcmp(cmd, "DBG") && nsct == 0) {
+                else if (strcmp(cmd, "DBG") == 0 && nsct == 1) {
                     int val[4];
                     bool sucFlag = ExtractSct(nucRxBuf, smcpos[0], smcpos[1], 4, val);
                     if (!sucFlag) {
@@ -239,7 +247,7 @@ void Cmd1Decode() {
 
 void RxCleanUp(char * buf, int index, int &size) {
     for (int i = index; i < size; ++i)
-        buf[i-index] = rxBuf[i];
+        buf[i-index] = buf[i];
     for (int i = size - index; i < size; ++i)
         buf[i] = '\0';
     size -= index;
@@ -251,6 +259,7 @@ bool ExtractVal(char * buf, int findex, int rindex, int &target) {
         if (buf[i] < '0' || buf[i] > '9')
             return false;
         val *= 10;
+        val += buf[i] - '0';
     }
     target = val;
     return true;
@@ -266,7 +275,7 @@ bool ExtractSct(char * buf, int findex, int rindex, int nums, int * target) {
         if (buf[i] == ',')
             compos[++ncom] = i;
     }
-    if (ncom != nums)
+    if (ncom + 1 != nums)
         return false;
 
     for (int i = 0; i < nums; ++i) {

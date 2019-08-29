@@ -1,10 +1,14 @@
-# Tars Serial Protocol
+# Tars
+
+可爱的小机器人+智能家居管理终端，创意源自Intersteller中的机器人Tars，2019夏季THUEE电子设计大赛作品
+
+## Tars Serial Protocol
 
 每条指令包(pkg, package)不得超过128个字符，以`$`作为起始符，`<`作为终止符。整条指令分为指令头(hdr, header)和指令消息(msg, message)两部分，中间用`:`隔开。
 
 指令示例：`$ACONN1:27;<`
 
-## 指令头
+### 指令头
 
 指令头分为三部分：设备代码(dvc, device)、指令类型（cmd, command)、指令消息条数。
 
@@ -14,13 +18,13 @@
 
 指令消息条数占一个字符为，可选值为`0~9`，必须与指令消息中`;`的数目保持一致（详见指令消息）。
 
-## 指令消息
+### 指令消息
 
 指令消息中包含nmsg个（nmsg为指令消息条数）字段(sct, section)，每个字段以`;`结尾。若字段中包含多个值(val, value)，则每个值之间用`,`隔开，详见指令类型清单。
 
-## 指令类型清单
+### 指令类型清单
 
-### TS - Tars
+#### TS - Tars
 
 - [x] `SLP`：休眠模式，nmsg = 0。
 - [x] `SDB`：工作模式，nmsg = 0。
@@ -32,7 +36,7 @@
 - [ ] `STP`：停止当前动作。
 - [x] `DBG`：调试指令，nmsg = 1，每个sct中包含4个val，同`FWD`指令。示例：`$TSDBG1:15,160,0,200;<`
 
-### AC - Air Conditioner
+#### AC - Air Conditioner
 
 - [x] `ONN`：打开空调，nmsg = 0时以默认温度和模式打开，nmsg = 1时需要在msg中给出开启温度。示例：`$ACONN1:27;<`
 - [x] `OFF`：关闭空调，nmsg = 0。示例：`$ACOFF0:<`
@@ -40,10 +44,13 @@
 - [ ] `MOD`：调节模式，nmsg = 1，未实现
 - [ ] `SPD`：调节风速，nmsg = 1，未实现
 
-### LT - Light
+#### LT - Light
 - [x] `ONN`：打开灯光，nmsg = 0。
 - [x] `OFF`：关闭灯光，nmsg = 0。
 
-### PW - Power
+#### PW - Power
 - [x] `ONN`：打开电源，nmsg = 0。
 - [x] `OFF`：关闭电源，nmsg = 0。
+
+### Particle Photon Post Command Example
+`$ curl https://api.particle.io/v1/devices/49002a001151373331333230/tsdbg -d access_token=04e6d2090d28e4b27a7daaa5f17c3a45fc404e56 -d "args=100,100,100,100;"`

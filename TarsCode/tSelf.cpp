@@ -4,7 +4,7 @@ Servo tarsLUp, tarsRUp, tarsLTurn, tarsRTurn;
 
 unsigned char tsInitial[4] = {100, 75, 55, 70};
 unsigned char tsAngle[9][2] = {{15, 160}, {15, 110}, {140, 40}, {40, 85}, {120, 60}, {60, 55}, {100, 75}};
-unsigned char tsMode[9] = {0, 1, 0, 1, 0, 1, 0, -1, -1}; // 0: up, 1: turn
+unsigned char tsMode[9] = {0, 1, 0, 1, 0, 1, 0, 3, 3}; // 0: up, 1: turn
 int tsInterval[9] = {200, 1200, 800, 800, 200, 800, 2000, -1, -1};
 
 void tTsInit() {
