@@ -241,7 +241,6 @@ void Cmd1Decode() {
                     tLtOff();
                 }
             }
-
             isReady = false;
             RxCleanUp(nucRxBuf, smcpos[nsct] + 2, nucRxPtr);
         }
