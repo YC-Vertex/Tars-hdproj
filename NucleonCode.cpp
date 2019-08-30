@@ -1,5 +1,5 @@
 void setup() {
-    Serial1.begin(115200);
+    Serial1.begin(9600);
     Particle.function("send", sendString);
     Particle.function("tssts", sendTsStatus);       // slp, sdb, mvf, mvb, stp, sav
     Particle.function("tsint", sendTsInitial);
@@ -11,6 +11,8 @@ void setup() {
     Particle.function("acsts", sendAcStatus);       // onn, off
     Particle.function("actpr", sendAcTemperature);
     Particle.function("ltsts", sendLtStatus);       // onn, off
+    Particle.function("lttpl", sendLtTemplate);
+    Particle.function("ltclr", sendLtColor);
     Particle.function("pwsts", sendPwStatus);       // onn, off
 }
 
@@ -109,6 +111,20 @@ int sendLtStatus(String command) {
     }
     Serial1.write(command);
     Serial1.write("0:<");
+    return 0;
+}
+
+int sendLtTemplate(String command) {
+    Serial1.write("$LTTPL1:");
+    Serial1.write(command);
+    Serial1.write("<");
+    return 0;
+}
+
+int sendLtColor(String command) {
+    Serial1.write("$LTCLR1:");
+    Serial1.write(command);
+    Serial1.write("<");
     return 0;
 }
 

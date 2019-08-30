@@ -11,8 +11,9 @@
 #define COLOR_ORDER GRB
 
 #define UPDATES_PER_SECOND 100
+#define LT_DELAY 600
 
-extern const unsigned char tsTemplate[2][3];
+extern const unsigned char tsTemplate[3][3];
 extern int curTemp;
 extern int curColor[3];
 

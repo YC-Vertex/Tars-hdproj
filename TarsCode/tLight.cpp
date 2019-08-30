@@ -1,7 +1,7 @@
 #include "tLight.h"
 
-const unsigned char tsTemplate[2][3] = {
-    {BRIGHTNESS, BRIGHTNESS, BRIGHTNESS}, {20, 20, BRIGHTNESS}
+const unsigned char tsTemplate[3][3] = {
+    {BRIGHTNESS, BRIGHTNESS, BRIGHTNESS}, {20, 20, BRIGHTNESS}, {20, 20, 20}
 };
 int curTemp = 1;
 int curColor[3] = {0, 0, 0};
@@ -29,6 +29,28 @@ bool tLtOff() {
 
 void tLtSetTemplate(int index) {
     curTemp = index;
+
+    if (curTemp >= 1) {
+        for (int i = 0; i < LED_CNT; ++i) {
+            int diff[3] = {
+                tsTemplate[curTemp-1][0] - tsLeds[i].r,
+                tsTemplate[curTemp-1][1] - tsLeds[i].g,
+                tsTemplate[curTemp-1][2] - tsLeds[i].b
+            };
+            for (int j = 0; j < 8; ++j) {
+                tsLeds[i].r += diff[0] / 8;
+                tsLeds[i].g += diff[1] / 8;
+                tsLeds[i].b += diff[2] / 8;
+                FastLED.show();
+                delay(10);
+            }
+            tsLeds[i].r = tsTemplate[curTemp-1][0];
+            tsLeds[i].g = tsTemplate[curTemp-1][1];
+            tsLeds[i].b = tsTemplate[curTemp-1][2];
+            FastLED.show();
+            delay(10);
+        }
+    }
 }
 
 void tLtSetColor(int * color) {
@@ -36,6 +58,26 @@ void tLtSetColor(int * color) {
     curColor[1] = color[1];
     curColor[2] = color[2];
     curTemp = -1;
+
+    for (int i = 0; i < LED_CNT; ++i) {
+        int diff[3] = {
+            curColor[0] - tsLeds[i].r,
+            curColor[1] - tsLeds[i].g,
+            curColor[2] - tsLeds[i].b
+        };
+        for (int j = 0; j < 8; ++j) {
+            tsLeds[i].r += diff[0] / 8;
+            tsLeds[i].g += diff[1] / 8;
+            tsLeds[i].b += diff[2] / 8;
+            FastLED.show();
+            delay(10);
+        }
+        tsLeds[i].r = curColor[0];
+        tsLeds[i].g = curColor[1];
+        tsLeds[i].b = curColor[2];
+        FastLED.show();
+        delay(10);
+    }
 }
 
 

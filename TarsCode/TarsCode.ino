@@ -26,7 +26,7 @@ void DebugOutput(char * dvc, char * cmd, char * sts);
 
 void setup() {
     Serial.begin(115200);
-    Serial1.begin(115200);
+    Serial1.begin(9600);
     tTsInit(true);
     tLtInit();
 }
@@ -133,10 +133,19 @@ void Cmd1Decode() {
             if (isStart) {
                 Serial.println(nucRxBuf);
                 if (i == 1) {
+                    if (nucRxBuf[i] >= 'a' && nucRxBuf[i] <= 'z') {
+                        nucRxBuf[i] += 'A' - 'a';
+                        nucRxBuf[i+1] += 'A' - 'a';
+                    }
                     dvc[0] = nucRxBuf[i];
                     dvc[1] = nucRxBuf[i+1];
                     dvc[2] = '\0';
                 } else if (i == 3) {
+                    if (nucRxBuf[i] >= 'a' && nucRxBuf[i] <= 'z') {
+                        nucRxBuf[i] += 'A' - 'a';
+                        nucRxBuf[i+1] += 'A' - 'a';
+                        nucRxBuf[i+2] += 'A' - 'a';
+                    }
                     cmd[0] = nucRxBuf[i];
                     cmd[1] = nucRxBuf[i+1];
                     cmd[2] = nucRxBuf[i+2];
@@ -173,9 +182,11 @@ void Cmd1Decode() {
             if (strcmp(dvc, "TS") == 0) {
                 if (strcmp(cmd, "SLP") == 0 && nsct == 0) {
                     tTsSleep();
+                    tLtSetTemplate(3);
                 }
                 else if (strcmp(cmd, "SDB") == 0 && nsct == 0) {
                     tTsStandby();
+                    tLtSetTemplate(1);
                 }
                 else if (strcmp(cmd, "INT") == 0 && nsct == 4) {
                     int val[4];
@@ -187,6 +198,9 @@ void Cmd1Decode() {
                         DebugOutput(dvc, cmd, "Error");
                     } else {
                         tTsSetInitial(val);
+                        tLtSetTemplate(2);
+                        delay(LT_DELAY);
+                        tLtSetTemplate(1);
                     }
                 }
                 else if (strcmp(cmd, "FWD") == 0) {
@@ -199,6 +213,9 @@ void Cmd1Decode() {
                             tTsSetForwardSingle(i, val);
                         }
                     }
+                    tLtSetTemplate(2);
+                    delay(LT_DELAY);
+                    tLtSetTemplate(1);
                 }
                 else if (strcmp(cmd, "BWD") == 0) {
                     for (int i = 0; i < nsct; ++i) {
@@ -210,6 +227,9 @@ void Cmd1Decode() {
                             tTsSetBackwardSingle(i, val);
                         }
                     }
+                    tLtSetTemplate(2);
+                    delay(LT_DELAY);
+                    tLtSetTemplate(1);
                 }
                 else if (strcmp(cmd, "FWS") == 0 && nsct == 1) {
                     int val[5];
@@ -218,6 +238,9 @@ void Cmd1Decode() {
                         DebugOutput(dvc, cmd, "Error");
                     } else {
                         tTsSetForwardSingle(val[0], &val[1]);
+                        tLtSetTemplate(2);
+                        delay(LT_DELAY);
+                        tLtSetTemplate(1);
                     }
                 }
                 else if (strcmp(cmd, "BWS") == 0 && nsct == 1) {
@@ -227,16 +250,26 @@ void Cmd1Decode() {
                         DebugOutput(dvc, cmd, "Error");
                     } else {
                         tTsSetForwardSingle(val[0], &val[1]);
+                        tLtSetTemplate(2);
+                        delay(LT_DELAY);
+                        tLtSetTemplate(1);
                     }
                 }
                 else if (strcmp(cmd, "MVF") == 0 && nsct == 0) {
+                    tLtSetTemplate(2);
                     tTsMoveForward();
+                    tLtSetTemplate(1);
                 }
                 else if (strcmp(cmd, "MVB") == 0 && nsct == 0) {
+                    tLtSetTemplate(2);
                     tTsMoveBackward();
+                    tLtSetTemplate(1);
                 }
                 else if (strcmp(cmd, "STP") == 0 && nsct == 0) {
                     tTsStop();
+                    tLtSetTemplate(2);
+                    delay(LT_DELAY);
+                    tLtSetTemplate(1);
                 }
                 else if (strcmp(cmd, "DBG") == 0 && nsct == 1) {
                     int val[4];
@@ -244,31 +277,45 @@ void Cmd1Decode() {
                     if (!sucFlag) {
                         DebugOutput(dvc, cmd, "Error");
                     } else {
+                        tLtSetTemplate(2);
                         tTsDebug(val[0], val[1], val[2], val[3]);
+                        tLtSetTemplate(1);
                     }
                 }
                 else if (strcmp(cmd, "SAV") == 0 && nsct == 0) {
                     tTsSave();
+                    tLtSetTemplate(2);
+                    delay(LT_DELAY);
+                    tLtSetTemplate(1);
                 }
             }
 
             // air conditioner
             else if (strcmp(dvc, "AC") == 0) {
                 if (strcmp(cmd, "ONN") == 0) {
-                    if (nsct == 0) 
+                    if (nsct == 0) {
                         tAcOn();
-                    else if (nsct == 1) {
+                        tLtSetTemplate(2);
+                        delay(LT_DELAY);
+                        tLtSetTemplate(1);
+                    } else if (nsct == 1) {
                         int val = 0;
                         bool sucFlag = ExtractVal(nucRxBuf, smcpos[0], smcpos[1], val);
                         if (!sucFlag) {
                             DebugOutput(dvc, cmd, "Error");
                         } else {
                             tAcOn(val);
+                            tLtSetTemplate(2);
+                            delay(LT_DELAY);
+                            tLtSetTemplate(1);
                         }
                     }
                 }
                 else if (strcmp(cmd, "OFF") == 0 && nsct == 0) {
                     tAcOff();
+                    tLtSetTemplate(2);
+                    delay(LT_DELAY);
+                    tLtSetTemplate(1);
                 }
 
             }
@@ -304,10 +351,16 @@ void Cmd1Decode() {
             // power
             else if (strcmp(dvc, "PW") == 0) {
                 if (strcmp(cmd, "ONN") == 0 && nsct == 0) {
-                    tLtOn();
+                    tPwOn();
+                    tLtSetTemplate(2);
+                    delay(LT_DELAY);
+                    tLtSetTemplate(1);
                 }
                 else if (strcmp(cmd, "OFF") == 0 && nsct == 0) {
-                    tLtOff();
+                    tPwOff();
+                    tLtSetTemplate(2);
+                    delay(LT_DELAY);
+                    tLtSetTemplate(1);
                 }
             }
 
