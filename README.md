@@ -2,6 +2,10 @@
 
 可爱的小机器人+智能家居管理终端，创意源自Intersteller中的机器人Tars，2019夏季THUEE电子设计大赛作品
 
+## Readme
+
+想多了，没有Readme的，看那天有空心情好再写吧（
+
 ## Tars Serial Protocol
 
 每条指令包(pkg, package)不得超过128个字符，以`$`作为起始符，`<`作为终止符。整条指令分为指令头(hdr, header)和指令消息(msg, message)两部分，中间用`:`隔开。
@@ -26,8 +30,8 @@
 
 #### TS - Tars
 
-- [ ] `SLP`：休眠模式，nmsg = 0。
-- [ ] `SDB`：工作模式，nmsg = 0。
+- [x] `SLP`：休眠模式，nmsg = 0。
+- [x] `SDB`：工作模式，nmsg = 0。
 - [x] `INT`：修改机器人舵机默认位置，nmsg = 4，分别为lup rup lturn rturn。示例：`$TSINT4:100;75;55;70;<`
 - [x] `FWD`：修改前进动作，nmsg >= 1，每个sct中包含4个val，分别为langle rangle upturnflag(0:up,1:turn) delay(ms)。示例：`$TSFWD1:15,160,0,200;<`
 - [x] `BWD`：修改后退动作，nmsg >= 1，同上。
@@ -50,12 +54,12 @@
 #### LT - Light
 - [x] `ONN`：打开灯光，nmsg = 0。
 - [x] `OFF`：关闭灯光，nmsg = 0。
-- [ ] `TPL`：预定义模板，nmsg = 1，在msg中给出模板编号。
-- [ ] `CLR`：修改颜色，nmsg = 1，每个sct中包含3个val，分别为r g b。
+- [x] `TPL`：预定义模板，nmsg = 1，在msg中给出模板编号。
+- [x] `CLR`：修改颜色，nmsg = 1，每个sct中包含3个val，分别为r g b。
 
 #### PW - Power
 - [x] `ONN`：打开电源，nmsg = 0。
 - [x] `OFF`：关闭电源，nmsg = 0。
 
 ### Particle Photon Post Command Example
-`$ curl https://api.particle.io/v1/devices/49002a001151373331333230/tsdbg -d access_token=04e6d2090d28e4b27a7daaa5f17c3a45fc404e56 -d "args=100,100,100,100;"`
+`$ curl https://api.particle.io/v1/devices/49002a001151373331333230/tsdbg -d access_token=04e6d2090d28e4b27a7daaa5f17c3a45fc404e56 -d "args=90,90,0,100;"`
