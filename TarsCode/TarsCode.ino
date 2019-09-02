@@ -27,7 +27,7 @@ void DebugOutput(char * dvc, char * cmd, char * sts);
 void setup() {
     Serial.begin(115200);
     Serial1.begin(9600);
-    tTsInit(true);
+    tTsInit();
     tLtInit();
 }
 
@@ -182,6 +182,13 @@ void Cmd1Decode() {
             if (strcmp(dvc, "TS") == 0) {
                 if (strcmp(cmd, "SLP") == 0 && nsct == 0) {
                     tTsSleep();
+                    for (int i = 0; i < TS_REP_COUNT; ++i) {
+                        tarsLUp.write(tsInitial[0]);   // + : down
+                        tarsRUp.write(tsInitial[1]);   // - : down
+                        tarsLTurn.write(tsInitial[2]); // - : front
+                        tarsRTurn.write(tsInitial[3]); // + : front
+                        delay(TS_REP_DELAY);
+                    }
                     tLtSetTemplate(3);
                 }
                 else if (strcmp(cmd, "SDB") == 0 && nsct == 0) {

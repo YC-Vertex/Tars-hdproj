@@ -2,18 +2,17 @@
 
 Servo tarsLUp, tarsRUp, tarsLTurn, tarsRTurn;
 
-unsigned char tsInitial[4] = {0, 0, 60, 75};
-// unsigned char tsInitial[4] = {60, 80, 60, 75};
-unsigned char tsfAngle[9][2] = {{0, 140}, {20, 115}, {50, 90}, {40, 95}, {70, 70}, {60, 75}, {60, 80}};
+unsigned char tsInitial[4] = {120, 60, 90, 90};
+unsigned char tsfAngle[9][2] = {{40, 140}, {20, 160}, {60, 120}, {50, 130}, {140, 40}, {90, 90}, {120, 60}};
 unsigned char tsfMode[9] = {0, 1, 0, 1, 0, 1, 0, 3, 3}; // 0: up, 1: turn
-int tsfInterval[9] = {200, 1200, 800, 800, 800, 800, 2000, -1, -1};
+int tsfInterval[9] = {100, 100, 1200, 240, 240, 240, 1600, -1, -1};
 unsigned char tsbAngle[9][2] = {{15, 160}, {15, 110}, {140, 40}, {40, 85}, {120, 60}, {60, 55}, {100, 75}};
 unsigned char tsbMode[9] = {0, 1, 0, 1, 0, 1, 0, 3, 3}; // 0: up, 1: turn
 int tsbInterval[9] = {200, 200, 200, 200, 200, 200, 200, -1, -1};
 
 void tTsInit(bool isInitFromEeprom) {
-    tarsLUp.attach(8);
-    tarsRUp.attach(9);
+    tarsLUp.attach(7);
+    tarsRUp.attach(8);
     tarsLTurn.attach(10);
     tarsRTurn.attach(11);
 
