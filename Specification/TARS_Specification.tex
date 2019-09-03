@@ -204,9 +204,22 @@ morekeywords={*,...}
     
     \hspace{1.5em}开机（进入前述的初始化模态）后，终端会播放语音“欢迎使用TARS”的语音，同时无限灯将发白光（如图一所示）。在进入TARS模态后，无限灯将循环发出彩色光，表示正等待指令（如图二所示）。收到指令后，智能终端将执行相应指令并使无限灯发蓝光，表示收到指令（如图三所示）。进入睡眠模式后，终端会播放语音“TARS进入睡眠模式”，并使无限灯发白光，表示进入睡眠模式。
 
-\section{电路与机械结构设计}
+\section{机械结构设计}
 
 \section{程序设计}
+    \hspace{1.5em}对于核心处理器Arduino Mega，考虑到Arduino对于外设中断的支持较弱，所以主要采用阻塞式面向过程程序设计。在每个循环中先尝试读取由Photon和Newway发来的协议化串口消息，并对其中的数据进行解析、处理、执行；然后考虑到LED灯带有时需要渐变或连续改变亮度与颜色，所以在主循环体中也加入了LED灯带显示的相关代码。
+    \begin{lstlisting}[language={C++}]
+void loop() {
+    Serial1Input();
+
+    // led display
+    /* some code here */
+    FastLED.show();
+    FastLED.delay(1000 / UPDATES_PER_SECOND);
+}
+    \end{lstlisting}
+    \hspace{1.5em}具体说明对数据进行处理执行的过程，我们将每个输出模块的相关代码整理成单独的库文件，通过调用其中的函数接口来执行相关操作。其中包括了红外发送、行动前进指令、行动调试模式、LED灯带变色等所有在系统架构设计章节所提到的功能。
+    \hspace{1.5em}对于网路端消息分发结点Particle Photon，其代码内容即是定义处理POST请求的相关函数接口，并将POST请求中所包含的信息重新整合后通过串口发送给核心处理器Arduino Mega。
 
 \section{测试过程}
     \subsection{机械结构调试}
