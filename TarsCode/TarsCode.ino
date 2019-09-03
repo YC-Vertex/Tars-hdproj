@@ -34,7 +34,7 @@ void setup() {
 void loop() {
     Serial1Input();
 
-    // color
+    // led display
     if (curTemp == 0) {
         static uint8_t startIndex = 0;
         startIndex = startIndex + 1;
@@ -53,7 +53,6 @@ void loop() {
             tsLeds[i].b = tsTemplate[curTemp-1][2];
         }
     }
-    
     FastLED.show();
     FastLED.delay(1000 / UPDATES_PER_SECOND);
 }
